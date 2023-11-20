@@ -14,7 +14,7 @@ class AddEditCoffeeForm(QDialog, Ui_AddEditCoffeeForm):
 
     def save_data(self):
         # Сохранение данных в базе данных
-        connection = sqlite3.connect('coffee.sqlite')
+        connection = sqlite3.connect('data/coffee.sqlite')
         cursor = connection.cursor()
 
         # Пример: вставка новой записи
@@ -71,12 +71,14 @@ class CoffeeApp(QMainWindow, Ui_CoffeeApp):
             form = AddEditCoffeeForm(self)
             # Заполняем форму данными из выбранной строки
             for col_num in range(self.ui.tableWidget.columnCount()):
-                form.findChild(QLineEdit, f'''
-{self.ui.tableWidget.horizontalHeaderItem(col_num).text()}LineEdit''') \
-                    .setText(
-                    self.ui.tableWidget.item(selected_row, col_num).text())
-            if form.exec_() == QDialog.Accepted:
-                self.load_data()  # Обновляем данные после редактирования
+                header_item = self.ui.tableWidget.horizontalHeaderItem(col_num)
+                if header_item:
+                    line_edit = form.findChild(QLineEdit,
+                                               f'{header_item.text()}LineEdit')
+                    if line_edit:
+                        line_edit.setText(
+                            self.ui.tableWidget.item(selected_row,
+                                                     col_num).text())
 
 
 if __name__ == "__main__":
