@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AddEditCoffeeForm</class>
+ <widget class="QDialog" name="AddEditCoffeeForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Add/Edit Coffee</string>
+  </property>
+  <widget class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLineEdit" name="nameLineEdit">
+     <property name="placeholderText">
+      <string>Name</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="roastDegreeLineEdit">
+     <property name="placeholderText">
+      <string>Roast Degree</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="priceLineEdit">
+     <property name="placeholderText">
+      <string>Price</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="saveButton">
+     <property name="text">
+      <string>Save</string>
+     </property>
+    </widget>
+   </item>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

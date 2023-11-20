@@ -23,6 +23,20 @@
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="addCoffeeButton">
+      <property name="text">
+       <string>Add Coffee</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="editCoffeeButton">
+      <property name="text">
+       <string>Edit Coffee</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QTableWidget" name="tableWidget">
       <property name="rowCount">
        <number>0</number>
