@@ -1,14 +1,15 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, \
     QTableWidgetItem, QLineEdit
-from PyQt5.uic import loadUi
 import sqlite3
+from UI.addEditCoffeeForm import Ui_AddEditCoffeeForm
+from UI.main import Ui_CoffeeApp
 
 
-class AddEditCoffeeForm(QDialog):
+class AddEditCoffeeForm(QDialog, Ui_AddEditCoffeeForm):
     def __init__(self, parent=None):
         super(AddEditCoffeeForm, self).__init__(parent)
-        loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
         self.saveButton.clicked.connect(self.save_data)
 
     def save_data(self):
@@ -29,16 +30,18 @@ class AddEditCoffeeForm(QDialog):
         self.accept()  # Закрываем форму после сохранения данных
 
 
-class CoffeeApp(QMainWindow):
+class CoffeeApp(QMainWindow, Ui_CoffeeApp):
     def __init__(self):
         super(CoffeeApp, self).__init__()
-        loadUi('main.ui', self)
-        self.loadDataButton.clicked.connect(self.load_data)
-        self.addCoffeeButton.clicked.connect(self.show_add_coffee_form)
-        self.editCoffeeButton.clicked.connect(self.show_edit_coffee_form)
+        self.ui = Ui_CoffeeApp()
+        self.ui.setupUi(self)
+
+        self.ui.loadDataButton.clicked.connect(self.load_data)
+        self.ui.addCoffeeButton.clicked.connect(self.show_add_coffee_form)
+        self.ui.editCoffeeButton.clicked.connect(self.show_edit_coffee_form)
 
     def load_data(self):
-        connection = sqlite3.connect('coffee.sqlite')
+        connection = sqlite3.connect('data/coffee.sqlite')
         cursor = connection.cursor()
 
         # Пример запроса к базе данных
@@ -46,14 +49,14 @@ class CoffeeApp(QMainWindow):
         data = cursor.fetchall()
 
         # Очистка таблицы перед загрузкой новых данных
-        self.tableWidget.setRowCount(0)
+        self.ui.tableWidget.setRowCount(0)
 
         # Загрузка данных в QTableWidget
         for row_num, row_data in enumerate(data):
-            self.tableWidget.insertRow(row_num)
+            self.ui.tableWidget.insertRow(row_num)
             for col_num, col_data in enumerate(row_data):
                 item = QTableWidgetItem(str(col_data))
-                self.tableWidget.setItem(row_num, col_num, item)
+                self.ui.tableWidget.setItem(row_num, col_num, item)
 
         connection.close()
 
@@ -63,15 +66,15 @@ class CoffeeApp(QMainWindow):
             self.load_data()  # Обновляем данные после добавления
 
     def show_edit_coffee_form(self):
-        selected_row = self.tableWidget.currentRow()
+        selected_row = self.ui.tableWidget.currentRow()
         if selected_row >= 0:
             form = AddEditCoffeeForm(self)
             # Заполняем форму данными из выбранной строки
-            for col_num in range(self.tableWidget.columnCount()):
+            for col_num in range(self.ui.tableWidget.columnCount()):
                 form.findChild(QLineEdit, f'''
-{self.tableWidget.horizontalHeaderItem(col_num).text()}LineEdit''') \
+{self.ui.tableWidget.horizontalHeaderItem(col_num).text()}LineEdit''') \
                     .setText(
-                    self.tableWidget.item(selected_row, col_num).text())
+                    self.ui.tableWidget.item(selected_row, col_num).text())
             if form.exec_() == QDialog.Accepted:
                 self.load_data()  # Обновляем данные после редактирования
 
