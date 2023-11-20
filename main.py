@@ -68,12 +68,14 @@ class CoffeeApp(QMainWindow):
             form = AddEditCoffeeForm(self)
             # Заполняем форму данными из выбранной строки
             for col_num in range(self.tableWidget.columnCount()):
-                form.findChild(QLineEdit, f'''
-{self.tableWidget.horizontalHeaderItem(col_num).text()}LineEdit''') \
-                    .setText(
-                    self.tableWidget.item(selected_row, col_num).text())
-            if form.exec_() == QDialog.Accepted:
-                self.load_data()  # Обновляем данные после редактирования
+                header_item = self.tableWidget.horizontalHeaderItem(col_num)
+                if header_item:
+                    line_edit = form.findChild(QLineEdit,
+                                               f'{header_item.text()}LineEdit')
+                    if line_edit:
+                        line_edit.setText(
+                            self.tableWidget.item(selected_row,
+                                                  col_num).text())
 
 
 if __name__ == "__main__":
